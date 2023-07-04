@@ -17,6 +17,10 @@ export default {
     Header,
     Footer,
   },
+  mounted() {
+    // home仓库中的请求派发一个action
+    this.$store.dispatch("categoryList");
+  },
 };
 </script>
 

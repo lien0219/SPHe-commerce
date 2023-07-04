@@ -5,10 +5,10 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 // 引入路由组件
-import Home from "@/pages/Home";
-import Login from "@/pages/Login";
-import Search from "@/pages/Search";
-import Register from "@/pages/Register";
+import Home from "@/views/Home";
+import Login from "@/views/Login";
+import Search from "@/views/Search";
+import Register from "@/views/Register";
 
 // 解决重复点击导航时，控制台出现报错(重写push、replace)
 // const VueRouterPush = VueRouter.prototype.push;

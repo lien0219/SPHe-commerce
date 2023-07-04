@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import ListContainer from "@/pages/Home/ListContainer";
-import Recommend from "@/pages/Home/Recommend";
-import Rank from "@/pages/Home/Rank";
-import Link from "@/pages/Home/Link";
-import Floor from "@/pages/Home/Floor";
-import Brand from "@/pages/Home/Brand";
+import ListContainer from "@/views/Home/ListContainer";
+import Recommend from "@/views/Home/Recommend";
+import Rank from "@/views/Home/Rank";
+import Link from "@/views/Home/Link";
+import Floor from "@/views/Home/Floor";
+import Brand from "@/views/Home/Brand";
 
 export default {
   name: "Home",
@@ -29,6 +29,10 @@ export default {
     Link,
     Floor,
     Brand,
+  },
+  mounted() {
+    // 派发action,获取floor组件得数据
+    this.$store.dispatch("getFloorList");
   },
 };
 </script>

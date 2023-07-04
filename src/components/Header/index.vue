@@ -73,11 +73,21 @@ export default {
       //   `/search/${this.keyword}?k=${this.keyword.toUpperCase()}`
       // );
       // 第三种：对象(params对象写法不能使用path,使用name)
-      this.$router.push({
-        name: "search",
-        params: { keyword: this.keyword || "" || undefined }, //params传空字符串用undefined解决
-        query: { k: this.keyword.toUpperCase() },
-      });
+      // this.$router.push({
+      //   name: "search",
+      //   params: { keyword: this.keyword || "" || undefined }, //params传空字符串用undefined解决
+      //   query: { k: this.keyword.toUpperCase() },
+      // });
+
+      //如果有query参数也带过去
+      if (this.$route.query) {
+        let location = {
+          name: "search",
+          params: { keyword: this.keyword || undefined },
+        };
+        location.query = this.$route.query;
+        this.$router.push(location);
+      }
     },
   },
 };

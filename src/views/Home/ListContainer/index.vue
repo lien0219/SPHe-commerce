@@ -4,10 +4,14 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <div class="swiper-container" ref="mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
+            <div
+              class="swiper-slide"
+              v-for="(carousel, index) in bannerList"
+              :key="carousel.id"
+            >
+              <img :src="carousel.imgUrl" />
             </div>
             <!-- <div class="swiper-slide">
               <img src="./images/banner2.jpg" />
@@ -101,7 +105,42 @@
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+import Swiper from "swiper";
+export default {
+  name: "",
+  mounted() {
+    this.$store.dispatch("getBannerList");
+  },
+  computed: {
+    ...mapState({
+      bannerList: (state) => state.home.bannerList,
+    }),
+  },
+  watch: {
+    // 监听bannerList数据得变化
+    bannerList: {
+      handler(newValue, oldValue) {
+        // nextTick在下一次dom更新、循环结束之后，执行延迟回调；在修改数据之后立即使用这个方法，获取更行后得dom
+        this.$nextTick(() => {
+          var mySwiper = new Swiper(this.$refs.mySwiper, {
+            loop: true,
+            // 分页器
+            pagination: {
+              el: ".swiper-pagination",
+              clickable: true,
+            },
+            // 按钮
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+          });
+        });
+      },
+    },
+  },
+};
 </script>
 
 <style scoped lang="less">
