@@ -29,29 +29,7 @@
             </div>
             <div class="floorBanner">
               <!-- 轮播图 -->
-              <div class="swiper-container" ref="cur">
-                <div class="swiper-wrapper">
-                  <div
-                    class="swiper-slide"
-                    v-for="(carousel, index) in list.carouselList"
-                    :key="carousel.id"
-                  >
-                    <img :src="carousel.imgUrl" />
-                  </div>
-                  <!-- <div class="swiper-slide">
-                    <img src="./images/floor-1-b02.png" />
-                  </div>
-                  <div class="swiper-slide">
-                    <img src="./images/floor-1-b03.png" />
-                  </div> -->
-                </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
-
-                <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-              </div>
+              <Carousel :list="list.carouselList" />
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
@@ -82,22 +60,10 @@
 </template>
 
 <script>
-import Swiper from "swiper";
 export default {
   props: ["list"],
   mounted() {
     //第一次写轮播图的时候是在组件内部发送请求，动态渲染结构至少需要等数据回来，所以这次不用$nextTick
-    var mySwiper = new Swiper(this.$refs.cur, {
-      loop: true,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
   },
 };
 </script>

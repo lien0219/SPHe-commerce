@@ -17,3 +17,21 @@ export const reqGetBannerList = () => mockRequests.get("/banner");
 
 //获取floor数据
 export const reqFloorList = () => mockRequests.get("/floor");
+
+//获取搜索模块数据 地址：  /api/list 请求方式：post  参数：需要带参数
+/*
+{
+  "category3Id": "61",
+  "categoryName": "手机",
+  "keyword": "小米",
+  "order": "1:desc",
+  "pageNo": 1,
+  "viewsize": 10,
+  "props": ["1:1700-2799:价格", "2:6.65-6.74英寸:屏幕尺寸"],
+  "trademark": "4:小米"
+}
+*/
+//当前这个函数需不需要接受外部传递参数
+//当前这个接口（获取搜索模块的数据），给服务器传递一个默认参数【至少是一个空对象】
+export const reqGetSearchInfo = (params) =>
+  ajax({ url: "/list", method: "post", data: params });
