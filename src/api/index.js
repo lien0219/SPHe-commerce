@@ -35,3 +35,8 @@ export const reqFloorList = () => mockRequests.get("/floor");
 //当前这个接口（获取搜索模块的数据），给服务器传递一个默认参数【至少是一个空对象】
 export const reqGetSearchInfo = (params) =>
   ajax({ url: "/list", method: "post", data: params });
+
+//获取产品信息的接口 URL：/api/item/{ skuId }  请求方式：get
+export const reqGoodsInfo = (skuId) => {
+  ajax({ url: `/item/${skuId}`, method: "get" });
+};

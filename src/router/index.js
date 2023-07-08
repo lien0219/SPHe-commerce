@@ -2,13 +2,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-Vue.use(VueRouter);
+import routes from "./routes";
 
-// 引入路由组件
-import Home from "@/views/Home";
-import Login from "@/views/Login";
-import Search from "@/views/Search";
-import Register from "@/views/Register";
+Vue.use(VueRouter);
 
 // 解决重复点击导航时，控制台出现报错(重写push、replace)
 // const VueRouterPush = VueRouter.prototype.push;
@@ -50,40 +46,10 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 // 路由配置
 export default new VueRouter({
   // 配置
-  routes: [
-    {
-      path: "/home",
-      name: "home",
-      component: Home,
-      meta: { show: true },
-    },
-    {
-      path: "/search/:keyword?", //？表示params参数可传可不传，不写？必须传params参数，否则路径出问题
-      name: "search",
-      component: Search,
-      meta: { show: true },
-      // props:{a:1,b:2} 对象写法
-      // 函数式写法：可以params参数、query参数，通过props传递给路由组件
-      // props: ($route) => {
-      //   return { keyword: this.$route.params.keyword, k: this.$route.query.k };
-      // },
-    },
-    {
-      path: "/login",
-      name: "login",
-      component: Login,
-      meta: { show: false },
-    },
-    {
-      path: "/register",
-      name: "register",
-      component: Register,
-      meta: { show: false },
-    },
-    // 重定向
-    {
-      path: "*",
-      redirect: "/home",
-    },
-  ],
+  routes,
+  // 滚动行为（vue自带）
+  scrollBehavior(to, from, savedPosition) {
+    // y:0 代表滚动条在最上方
+    return { y: 0 };
+  },
 });
