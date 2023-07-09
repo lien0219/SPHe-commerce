@@ -4,6 +4,8 @@ import Login from "@/views/Login";
 import Search from "@/views/Search";
 import Register from "@/views/Register";
 import Detail from "@/views/Detail";
+import AddCartSuccess from "@/views/AddCartSuccess";
+import ShopCart from "@/views/ShopCart";
 
 export default [
   {
@@ -16,6 +18,18 @@ export default [
     path: "/detail/:skuid",
     name: "detail",
     component: Detail,
+    meta: { show: true },
+  },
+  {
+    path: "/addcartsuccess",
+    name: "addcartsuccess",
+    component: AddCartSuccess,
+    meta: { show: true },
+  },
+  {
+    path: "/shopcart",
+    name: "shopcart",
+    component: ShopCart,
     meta: { show: true },
   },
   {

@@ -4,6 +4,8 @@ import axios from "axios";
 import nprogress from "nprogress";
 // 引入进度条样式
 import "nprogress/nprogress.css";
+// 引入store
+import store from "@/store";
 // 创建axios实例
 const ajax = axios.create({
   baseURL: "/api",
@@ -14,6 +16,14 @@ const ajax = axios.create({
 ajax.interceptors.request.use((config) => {
   // config:配置对象，包括headers请求头
   // 进度条开始
+  if (store.state.detail.uuid_token) {
+    //请求头添加一个字段(userTempId)：和后台商量好
+    config.headers.userTempId = store.state.detail.uuid_token;
+  }
+  //需要携带token带给服务器
+  if (store.state.user.token) {
+    config.headers.token = store.state.user.token;
+  }
   nprogress.start();
   return config;
 });

@@ -37,6 +37,13 @@ export const reqGetSearchInfo = (params) =>
   ajax({ url: "/list", method: "post", data: params });
 
 //获取产品信息的接口 URL：/api/item/{ skuId }  请求方式：get
-export const reqGoodsInfo = (skuId) => {
+export const reqGoodsInfo = (skuId) =>
   ajax({ url: `/item/${skuId}`, method: "get" });
-};
+
+// 添加到购物车中 ----api/cart/addToCart/{ skuId }/{ skuNum }
+export const reqAddOrUpdateShopCart = (skuId, skuNum) =>
+  ajax({ url: `/cart/addToCart/${skuId}/${skuNum}`, method: "post" });
+
+//获取购物车列表数据接口
+//URL:/api/cart/cartList  method:get
+export const reqCartList = ajax({ url: "/cart/cartList", method: "get" });

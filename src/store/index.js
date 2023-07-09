@@ -15,6 +15,7 @@ Vue.use(Vuex);
 import home from "./home";
 import search from "./search";
 import detail from "./detail";
+import shopcart from "./shopcart";
 // 对外暴露store实例
 export default new Vuex.Store({
   //   state,
@@ -25,5 +26,6 @@ export default new Vuex.Store({
     home,
     search,
     detail,
+    shopcart,
   },
 });
