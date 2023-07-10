@@ -1,88 +1,62 @@
 <template>
   <div class="pagination">
     <!-- 上 -->
-    <button :disabled="pageNo == 1" @click="$emit('getPageNo', pageNo - 1)">
-      上一页
-    </button>
-    <button
-      v-if="startNumAndEndNum.start > 1"
-      @click="$emit('getPageNo', 1)"
-      :class="{ active: pageNo == 1 }"
-    >
-      1
-    </button>
-    <button v-if="startNumAndEndNum.start > 2">···</button>
+    <button :disabled="pageNo==1" @click="$emit('getPageNo',pageNo-1)">上一页</button>
+    <button v-if="startNumberEndNum.start > 1" @click="$emit('getPage',1)" :class="{active:pageNo==1}"> 1</button>
+    <button v-if="startNumberEndNum.start > 2">···</button>
 
-    <!-- 中间 -->
-    <button
-      v-for="(page, index) in startNumAndEndNum.end"
-      :key="index"
-      v-if="page >= startNumAndEndNum.start"
-      @click="$emit('getPageNo', page)"
-      :class="{ active: pageNo == page }"
-    >
-      {{ page }}
-    </button>
+    <!-- 中间部分 -->
+    <button v-for="(page,index) in startNumberEndNum.end" :key="index" v-if="page>=startNumberEndNum.start" @click="$emit('getPageNo',page)" :class="{active:pageNo==page}">{{page}}</button>
 
     <!-- 下 -->
-    <button v-if="startNumAndEndNum.end < totalPage - 1">···</button>
-    <button
-      v-if="startNumAndEndNum.end < totalPage"
-      @click="$emit('getPageNo', totalPage)"
-      :class="{ active: pageNo == totalPage }"
-    >
-      {{ totalPage }}
-    </button>
-    <button
-      :disabled="pageNo == totalPage"
-      @click="$emit('getPageNo', pageNo + 1)"
-    >
-      下一页
-    </button>
+    <button v-if="startNumberEndNum.end < totalPage -1">···</button>
+    <button  v-if="startNumberEndNum.end < totalPage" @click="$emit('getPageNo',totalPage)" :class="{active:pageNo==totalPage}">{{totalPage}}</button>
+    <button :disabled="pageNo==totalPage" @click="$emit('getPageNo',pageNo+1)">下一页</button>
 
-    <button style="margin-left: 30px">共 {{ total }} 条</button>
+    <button style="margin-left: 30px">共{{ total }} 条</button>
   </div>
 </template>
 
 <script>
 export default {
   name: "Pagination",
-  props: ["pageNo", "pageSize", "total", "continues"],
+  props: ['pageNo', 'pageSize', 'total', 'continues'],
   computed: {
-    // 总页数
+    //总共多少页
     totalPage() {
-      // 向上取整
+      //向上取整
       return Math.ceil(this.total / this.pageSize);
     },
-    // 计算连续页码的起始和结束数字
-    startNumAndEndNum() {
-      const { continues, pageNo, totalPage } = this;
-      // 定义变量存储起始数字和结束数字
-      let start = 0,
+    //计算出连续的页码的起始数字和结束数字[连续页码的数字：至少是5]
+    startNumberEndNum(){
+        const {continues,pageNo,totalPage} = this;
+        //先定义两个变量存储起始数字和结束数字
+        let start = 0 , 
         end = 0;
-      // 连续页码数5，至少五页；不够五页判断不正常现象
-      if (continues > totalPage) {
-        start = 1;
-        end = totalPage;
-      } else {
-        // 总页数一定大于5的
-        // 开始数字  parseInt(取整)
-        start = pageNo - parseInt(continues / 2);
-        // 结束数字
-        end = pageNo + parseInt(continues / 2);
-        // start数字出现0或者负数
-        if (start <= 1) {
-          start = 1;
-          end = continues;
+        //连续页码数字5【就是至少五页】，如果出现不正常的现象【就是不够五页】
+        //不正常现象【总页数没有连续页码多】
+        if(continues > totalPage){
+            start = 1;
+            end = totalPage;
+        }else{
+            //正常现象【连续页码5，但是你的总页数一定是大于5的】
+            //起始数字
+            start = pageNo - parseInt(continues / 2);
+            //结束数字
+            end = pageNo + parseInt(continues / 2);   
+            //把出现不正常的现象【start数字出现0|负数】纠正 
+            if(start <= 1){
+                start = 1;
+                end = continues;
+            }
+            //把出现不正常的现象【end数字大于总页码】纠正
+            if(end > totalPage){
+                end = totalPage;
+                start = totalPage - continues + 1;
+            }  
         }
-        // end数字大于总页码
-        if (end > totalPage) {
-          end = totalPage;
-          start = totalPage - continues + 1;
-        }
-      }
-      return { start, end };
-    },
+        return {start,end};      
+    }
   },
 };
 </script>
@@ -120,7 +94,7 @@ export default {
     }
   }
 }
-.active {
+.active{
   background: skyblue;
 }
 </style>

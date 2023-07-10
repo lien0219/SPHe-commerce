@@ -1,14 +1,14 @@
 <template>
-  <!-- 商品分类导航 -->
   <div class="type-nav">
     <div class="container">
       <!-- 事件委派 | 事件委托 -->
       <div @mouseleave="leaveShow" @mouseenter="enterShow">
         <h2 class="all">全部商品分类</h2>
-        <!-- 三级联动 、 过渡动画 -->
+        <!-- 三级联动 -->
+        <!-- 过渡动画 -->
         <transition name="sort">
           <div class="sort" v-show="show">
-            <!-- 编程式路由+事件委派实现路由跳转和传参 -->
+            <!-- 利用事件委派+编程式导航实现路由的跳转与传递参数 -->
             <div class="all-sort-list2" @click="goSearch">
               <div
                 class="item"
@@ -30,7 +30,7 @@
                 >
                   <div
                     class="subitem"
-                    v-for="(c2, index) in c1.categoryChild"
+                    v-for="(c2) in c1.categoryChild"
                     :key="c2.categoryId"
                   >
                     <dl class="fore">
@@ -43,7 +43,7 @@
                       </dt>
                       <dd>
                         <em
-                          v-for="(c3, index) in c2.categoryChild"
+                          v-for="(c3) in c2.categoryChild"
                           :key="c3.categoryId"
                         >
                           <a
@@ -61,6 +61,7 @@
           </div>
         </transition>
       </div>
+
       <nav class="nav">
         <a href="###">服装城</a>
         <a href="###">美妆馆</a>
@@ -77,58 +78,78 @@
 
 <script>
 import { mapState } from "vuex";
-import throttle from "lodash/throttle"; //按需引入
+
+//引入方式：是把loadsh全部功能函数引入
+import _ from "lodash";
+//最好的引入方式：按需引入
+//import throttle from 'lodash/throttle';
 
 export default {
   name: "TypeNav",
   data() {
     return {
-      // 存储鼠标移入背景
-      currentIndex: -1,
+      //存储用户鼠标上的哪一个一级分类
+      currentIndex: -1, //鼠标还未移上
+
       show: true,
     };
   },
+  //组件挂载完毕，可以向服务器发请求
   mounted() {
-    // 组件挂载完毕，show变成false
+    //派发action
+    //this.$store.dispatch("categoryList");
+    //当组件挂载完毕，让show属性变为false
+    //如果不是Home路由组件，将TypeNav进行隐藏
     if (this.$route.path != "/home") {
       this.show = false;
     }
   },
   computed: {
     ...mapState({
-      // 注入参数state,即大仓库中的数据
+      //对象写法：右侧需要的是一个函数，当使用这个计算属性的时候，右侧函数会立即执行一次
+      //注入一个参数state，其实即为大仓库的数据
+      /* categoryList:(state)=>{
+        return state.home.categoryList;
+      }  只有一个参数可去除（），可简化为以下形式*/
       categoryList: (state) => state.home.categoryList,
     }),
   },
   methods: {
-    // 鼠标移入currentIndex
-    // changeIndex(index) {
-    //   // index一级分类的下标
-    //   this.currentIndex = index;
-    // },
-    // 鼠标移入防抖
-    changeIndex: throttle(function (index) {
-      // index一级分类的下标
+    //鼠标进入修改响应式数据currentIndeex数据
+    //throttle回调函数别用箭头函数，可能出现上下文this
+
+    changeIndex: _.throttle(function (index) {
+      //节流
+      //index:鼠标移上 某个一级分类的元素的索引值
+      //正常情况（用户慢慢的操作）：鼠标进入，每一个一级分类h3，都会触发鼠标进入事件
+      //非正常情况（用户操作很快）：本身全部的一级分类都应该触发鼠标进入事件，但是经过测试，只有部分h3触发了
+      //就是由于用户行为过快，导致浏览器反应不过来。如果当前回调函数中有一些打了业务，有可能出现卡顿现象。
       this.currentIndex = index;
     }, 50),
-    //一级分类鼠标移出
-    // leaveIndex() {
-    //   this.currentIndex = -1;
+
+    //一级分类鼠标移出的事件回调
+    //leaveIndex() {
+    //鼠标移出currentIndex,变为-1
+    //  this.currentIndex = -1;
     // },
-    // 路由跳转
     goSearch(event) {
-      // this.$router.push("/search");
-      // 优化：编程式导航+事件委派
-      let element = event.target;
-      // 节点属性dataset属性
-      console.log(element, "element");
+      //最好的解决方案：编程式导航 + 事件委派
+      //存在一些问题：事件委派，是把全部的子节点【h3、dt、d1、em】的事件委派给父亲节点
+      //点击a标签的时候，才会进行路由跳转【怎么能确定点击的一定是a标签】
+      //操作另外一个问题，即使你能确定点击的是a标签，如何区分是一级、二级、三级分类的标签
+
+      //第一个问题：把子节点当中a标签，我加上自定义属性data-categoryName，其余的子节点是没有的
+      let node = event.target;
+      //获取到当前触发这个事件的节点【h3、a、dt、d1】，需要带有data-categoryname这样的节点【一定是a标签】
+      //节点有一个属性dataset属性，可以获取节点的自定义属性与属性值
       let { categoryname, category1id, category2id, category3id } =
-        element.dataset;
+        node.dataset;
+      //如果标签身上拥有categoryname一定是a标签
       if (categoryname) {
-        //路由跳转参数
+        //整理路由跳转的参数
         let location = { name: "search" };
         let query = { categoryName: categoryname };
-        // 一级二级三级分类的a标签
+        //一级分类，二级分类，三级分类的a标签
         if (category1id) {
           query.category1Id = category1id;
         } else if (category2id) {
@@ -136,8 +157,9 @@ export default {
         } else {
           query.category3Id = category3id;
         }
+  
         //判断：如果路由跳转的时候，带有params参数，捎带传递过期
-        if (this.$route.params) {
+        if(this.$route.params){
           location.params = this.$route.params;
           //动态给location配置对象添加query属性
           location.query = query;
@@ -146,6 +168,7 @@ export default {
         }
       }
     },
+
     //当鼠标移入的时候，让商品分类列表进行展示
     enterShow() {
       if (this.$route.path != "/home") {
@@ -164,7 +187,7 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 .type-nav {
   border-bottom: 2px solid #e1251b;
 
@@ -273,25 +296,24 @@ export default {
               }
             }
           }
-
-          // &:hover {
-          //   .item-list {
-          //     display: block;
-          //   }
-          // }
-        }
-        .cur {
-          background: skyblue;
         }
       }
+
+      .cur {
+        background: skyblue;
+      }
     }
-    // 过渡动画
+
+    //过渡动画的样式
+    //过渡动画开始状态（进入）
     .sort-enter {
       height: 0px;
     }
+    //过渡动画结束状态（进入）
     .sort-enter-to {
       height: 461px;
     }
+    //定义动画时间、速率
     .sort-enter-active {
       transition: all 0.5s linear;
     }

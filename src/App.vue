@@ -1,27 +1,40 @@
 <template>
-  <div id="app">
+  <div> 
+    <!-- 使用 -->
     <Header></Header>
-    <!-- 路由出口 -->
+    <!-- 路由组件出口的地方 -->
     <router-view></router-view>
-    <!-- 在home和search显示，在登录和注册隐藏( v-show="$route.path == '/home' || $route.path == '/search'")-->
+    <!-- 在Home、Search显示的，在登录、注册隐藏 -->
     <Footer v-show="$route.meta.show"></Footer>
   </div>
 </template>
 
 <script>
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+//引入
+import Header from './components/Header'
+import Footer from './components/Footer'
+
 export default {
-  name: "App",
-  components: {
+  name: '',  
+  //注册
+  components:{
     Header,
-    Footer,
+    Footer
   },
-  mounted() {
-    // home仓库中的请求派发一个action
+  mounted(){
+    //派发一个action||获取商品分类的三级列表的数据
     this.$store.dispatch("categoryList");
-  },
-};
+  }
+}
 </script>
 
-<style></style>
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>

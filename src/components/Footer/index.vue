@@ -1,5 +1,4 @@
 <template>
-  <!-- 底部 -->
   <div class="footer">
     <div class="footer-container">
       <div class="footerList">
@@ -106,9 +105,7 @@
 </template>
 
 <script>
-export default {
-  name: "Footer",
-};
+export default {};
 </script>
 
 <style scope lang="less">

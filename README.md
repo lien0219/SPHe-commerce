@@ -8,19 +8,19 @@ node + webpack + 淘宝镜像
 ## Project setup
 
 ```
-npm install
+yarn
 ```
 
 ### Compiles and hot-reloads for development
 
 ```
-npm run serve
+yarn serve
 ```
 
 ### Compiles and minifies for production
 
 ```
-npm run build
+yarn build
 ```
 
 ### Lints and fixes files
@@ -442,3 +442,6 @@ order 属性的属性值最多有多少种写法：
 
 1.4 箭头用什么制作？
 阿里图标官网 https://www.iconfont.cn/
+
+-------后续
+项目后面的完善以及改造都补充在代码中
